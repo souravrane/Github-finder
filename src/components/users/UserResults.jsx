@@ -1,29 +1,14 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useContext } from "react";
+import GithubContext from "../../context/github/GithubContext";
 import Spinner from "../layout/Spinner";
 import UserItem from "./UserItem";
 
 function UserResults() {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { users, loading, fetchUsers } = useContext(GithubContext);
 
     useEffect(() => {
         fetchUsers();
     }, []);
-
-    const fetchUsers = async () => {
-        const response = await axios.get(
-            `${process.env.REACT_APP_GITHUB_URL}/users`,
-            {
-                headers: {
-                    Authorization: `${process.env.REACT_APP_GITHUB_TOKEN}`,
-                },
-            }
-        );
-
-        setUsers(response.data);
-        setLoading(false);
-    };
 
     if (loading) return <Spinner />;
     else
