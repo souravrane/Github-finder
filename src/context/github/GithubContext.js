@@ -17,23 +17,31 @@ export const GithubProvider = ({ children }) => {
 
     const setLoading = () => dispatch({ type: "SET_LOADING" });
 
-    const fetchUsers = async () => {
+    // Get search results
+    const searchUsers = async (username) => {
         setLoading();
-        const response = await axios.get(`${GITHUB_URL}/users`, {
+
+        const params = new URLSearchParams({
+            q: username,
+        });
+        const response = await axios.get(`${GITHUB_URL}/search/users`, {
             headers: {
                 Authorization: `${GITHUB_TOKEN}`,
             },
+            params,
         });
+
+        const { items } = response.data;
 
         dispatch({
             type: "GET_USERS",
-            payload: response.data,
+            payload: items,
         });
     };
 
     return (
         <GithubContext.Provider
-            value={{ users: state.users, loading: state.loading, fetchUsers }}
+            value={{ users: state.users, loading: state.loading, searchUsers }}
         >
             {children}
         </GithubContext.Provider>
