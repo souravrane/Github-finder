@@ -1,6 +1,6 @@
 # Github Finder
 
-<p align="center">
+<p align="left">
   <img src="https://user-images.githubusercontent.com/32779275/162584242-28e041a4-3a8f-4c83-802b-66be0179b38c.gif" alt="Github finder demo"/>
 </p>
 
