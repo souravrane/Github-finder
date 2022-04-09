@@ -12,7 +12,7 @@ function About() {
                 This uses Github developer APIs to fetch user profiles.
             </p>
             <p className="text-lg text-gray-400">
-                Version <span className="text-white">{pkg.version}</span>
+                Version : <strong>{pkg.version}</strong>
             </p>
         </div>
     );
