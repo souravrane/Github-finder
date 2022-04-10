@@ -3,15 +3,19 @@ import axios from "axios";
 const GITHUB_URL = process.env.REACT_APP_GITHUB_URL;
 const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
 
+const github = axios.create({
+    baseURL: GITHUB_URL,
+    headers: {
+        Authorization: `${GITHUB_TOKEN}`,
+    },
+});
+
 // Get search results
 export const searchUsers = async (username) => {
     const params = new URLSearchParams({
         q: username,
     });
-    const response = await axios.get(`${GITHUB_URL}/search/users`, {
-        headers: {
-            Authorization: `${GITHUB_TOKEN}`,
-        },
+    const response = await github.get(`/search/users`, {
         params,
     });
 
@@ -20,39 +24,12 @@ export const searchUsers = async (username) => {
     return items;
 };
 
-// Get a single user
-export const getUser = async (username) => {
-    try {
-        const response = await axios.get(`${GITHUB_URL}/users/${username}`, {
-            headers: {
-                Authorization: `${GITHUB_TOKEN}`,
-            },
-        });
+//  get user and repos
+export const getUserAndRepos = async (username) => {
+    const [user, repos] = await Promise.all([
+        github.get(`/users/${username}`),
+        github.get(`/users/${username}/repos`),
+    ]);
 
-        console.log(response);
-        const { data } = response;
-
-        return data;
-    } catch (e) {
-        window.location = "/notfound";
-    }
-};
-
-// Get user repos
-export const getUserRepos = async (username) => {
-    const params = new URLSearchParams({
-        sort: "created",
-        per_page: 10,
-    });
-
-    const response = await axios.get(`${GITHUB_URL}/users/${username}/repos`, {
-        headers: {
-            Authorization: `${GITHUB_TOKEN}`,
-        },
-        params,
-    });
-
-    const { data } = response;
-
-    return data;
+    return { user: user.data, repos: repos.data };
 };

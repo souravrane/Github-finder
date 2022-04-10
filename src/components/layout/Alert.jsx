@@ -7,7 +7,7 @@ function Alert() {
     return (
         alert != null && (
             <p className="flex items-start mb-4 space-x-2">
-                {alert.type == "error" && (
+                {alert.type === "error" && (
                     <svg
                         fill="none"
                         viewBox="0 0 24 24"
